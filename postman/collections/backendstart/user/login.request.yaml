@@ -1,0 +1,23 @@
+$kind: http-request
+name: login
+url: "{{server}}users/login?fullName=one&email=one@one&password=123455&username=one&avatar="
+method: POST
+queryParams:
+  - key: fullName
+    value: one
+  - key: email
+    value: one@one
+  - key: password
+    value: "123455"
+  - key: username
+    value: one
+  - key: avatar
+    value: ""
+body:
+  type: json
+  content: |-
+    {
+        "email":"one@one",
+        "password":"123455"
+    }
+order: 3446139202693347

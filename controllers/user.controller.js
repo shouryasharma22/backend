@@ -82,8 +82,8 @@ const loginUser = asyncHandler(async (req, res) => {
     //generate and give access and refresh token
     //send these tokens in cookies
     const { username, email, password } = req.body
-    if (!username || !email) {
-        throw new ApiError(400, "PLease enter username or email")
+    if (!(username || email)) {
+        throw new ApiError(400, "Please enter username or email")
     }
     const user = await User.findOne({ $or: [{ username }, { email }] })
     if (!user) throw new ApiError(404, "User doesnt exist")
@@ -97,7 +97,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
-        httpsOnly: true,
+        httpOnly: true,
         secure: true
     }
 
@@ -118,11 +118,11 @@ const logoutUser = asyncHandler(async (req, res) => {
         { new: true }
     )
     const options = {
-        httpsOnly: true,
+        httpOnly: true,
         secure: true
     }
     res.clearCookie("refreshToken", options)
-    res.clearCookie("accessToken", options)
+    res.cookie("accessToken", options)
     return res.status(200).json(new ApiResponse(200, "Logged out successfully",{}))
 })
 export { registerUser, loginUser, logoutUser }

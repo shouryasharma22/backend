@@ -225,36 +225,6 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, "Cover image updated successfully", user))
 })
 
-const addVideoToWatchHistory = asyncHandler(async (req, res) => {
-    const { videoId } = req.params
-
-    if (!videoId || videoId.trim() === "") {
-        throw new ApiError(400, "Video ID is required")
-    }
-    
-    const user = await User.findById(req.user._id)
-    if (!user) throw new ApiError(404, "User not found")
-    
-    const oldWatchHistory = await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-        $pull: { watchHistory: videoId }
-    }
-);
-
-    const updatedWatchHistory = await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-        $push: { watchHistory: videoId }
-    },
-    { new: true }
-);
-
-    if (!updatedWatchHistory) throw new ApiError(404, "User not found")
-    return res.status(200).json(new ApiResponse(200, "Video added to watch history successfully", updatedWatchHistory.watchHistory))
-})
-
-
 const getUserChannelProfile = asyncHandler(async (req, res) => {
     const { username } = req.params
 
@@ -356,4 +326,4 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     ])
     return res.status(200).json(new ApiResponse(200, "Watch history fetched successfully", user[0]?.watchHistoryVideos || []))
 })
-export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, addVideoToWatchHistory , getWatchHistory}
+export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory}
